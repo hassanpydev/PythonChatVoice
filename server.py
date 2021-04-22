@@ -7,9 +7,11 @@ import threading
 class Server:
     def __init__(self):
         self.ip = '78.47.62.183'
+        self.port = 9000
+        self.s = self.CreateServer()
         # while 1:
         #     try:
-        #         self.port = 9000
+        #
         #
         #         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #         self.s.bind((self.ip, self.port))
@@ -21,12 +23,11 @@ class Server:
 
         self.connections = []
         self.accept_connections()
-        self.s = self.CreateServer()
+
 
     def CreateServer(self):
         while 1:
             try:
-                self.port = 9000
 
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.bind((self.ip, self.port))
