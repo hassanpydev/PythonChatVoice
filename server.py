@@ -12,7 +12,7 @@ parser = args.parse_args()
 
 class Server:
     def __init__(self):
-        self.ip = parser.h
+        self.ip = parser.host
         self.port = parser.p
         self.s = self.CreateServer()
         # while 1:
