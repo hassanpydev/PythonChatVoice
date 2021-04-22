@@ -2,12 +2,16 @@
 
 import socket
 import threading
-
+import argparse
+args = argparse.ArgumentParser()
+args.add_argument('-h')
+args.add_argument('-p')
+parser = args.parse_args()
 
 class Server:
     def __init__(self):
-        self.ip = '78.47.62.183'
-        self.port = 9001
+        self.ip = parser.h
+        self.port = parser.p
         self.s = self.CreateServer()
         # while 1:
         #     try:
