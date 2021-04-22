@@ -7,7 +7,7 @@ import threading
 class Server:
     def __init__(self):
         self.ip = '78.47.62.183'
-        self.port = 9000
+        self.port = 9001
         self.s = self.CreateServer()
         # while 1:
         #     try:
@@ -23,7 +23,6 @@ class Server:
 
         self.connections = []
         self.accept_connections()
-
 
     def CreateServer(self):
         while 1:
