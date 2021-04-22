@@ -6,51 +6,53 @@ import argparse
 
 args = argparse.ArgumentParser()
 args.add_argument('-host', help="A host to bind on", required=True, type=str)
-args.add_argument('-p', help="A port to listen on", required=True, type=int)
+args.add_argument('-vp', help="A port to listen on for voice chat", required=True, type=int)
+args.add_argument('-cp', help="A port to listen on Command messages", required=True, type=int)
 parser = args.parse_args()
 
 
-class Server:
+class MainServer:
+    @staticmethod
+    def CreateServer(port, server_type):
+        while 1:
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.bind((parser.host, port))
+                print(f"A {server_type} is running on {port}")
+                return s
+            except BaseException as e:
+                print("Couldn't bind to that port\n", e)
+                break
+
+
+class Server(MainServer):
     def __init__(self):
         self.ip = parser.host
         self.port = parser.p
-        self.s = self.CreateServer()
-        # while 1:
-        #     try:
-        #
-        #
-        #         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #         self.s.bind((self.ip, self.port))
-        #
-        #         break
-        #     except:
-        #         print("Couldn't bind to that port")
-        #         break
+        self.voice_chat = self.CreateServer(parser.vp, "Voice Chat")
+        self.command_server = self.CreateServer(parser.cp, "Controller Server")
 
         self.connections = []
         self.accept_connections()
 
-    def CreateServer(self):
-        while 1:
-            try:
+    def controllerHandler(self):
+        pass
 
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.bind((self.ip, self.port))
-
-                return s
-
-            except:
-                print("Couldn't bind to that port")
-                break
+    def listenForController(self):
+        self.command_server.listen(100)
+        print('Running Controller on port: ' + str(parser.cp))
+        while True:
+            c, addr = self.command_server.accept()
+            print("[A new Client Connected {}]".format(addr))
+            self.connections.append(c)
+            threading.Thread(target=self.controllerHandler, args=(c, addr,)).start()
 
     def accept_connections(self):
-        self.s.listen(100)
-
-        print('Running on IP: ' + self.ip)
-        print('Running on port: ' + str(self.port))
+        self.voice_chat.listen(100)
+        print('Running Voice Chat on port: ' + str(parser.vp))
 
         while True:
-            c, addr = self.s.accept()
+            c, addr = self.voice_chat.accept()
             print("[A new Client Connected {}]".format(addr))
             self.connections.append(c)
 
@@ -58,7 +60,7 @@ class Server:
 
     def broadcast(self, sock, data):
         for client in self.connections:
-            if client != self.s and client != sock:
+            if client != self.voice_chat and client != sock:
                 try:
                     client.send(data)
                 except:
