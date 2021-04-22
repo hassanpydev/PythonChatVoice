@@ -3,10 +3,12 @@
 import socket
 import threading
 import argparse
+
 args = argparse.ArgumentParser()
-args.add_argument('-h')
-args.add_argument('-p')
+args.add_argument('-h', help="A host to bind on", required=True, type=str)
+args.add_argument('-p', help="A port to listen on", required=True, type=int)
 parser = args.parse_args()
+
 
 class Server:
     def __init__(self):
