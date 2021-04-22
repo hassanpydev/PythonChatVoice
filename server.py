@@ -7,20 +7,35 @@ import threading
 class Server:
     def __init__(self):
         self.ip = '78.47.62.183'
+        # while 1:
+        #     try:
+        #         self.port = 9000
+        #
+        #         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #         self.s.bind((self.ip, self.port))
+        #
+        #         break
+        #     except:
+        #         print("Couldn't bind to that port")
+        #         break
+
+        self.connections = []
+        self.accept_connections()
+        self.s = self.CreateServer()
+
+    def CreateServer(self):
         while 1:
             try:
                 self.port = 9000
 
-                self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.s.bind((self.ip, self.port))
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.bind((self.ip, self.port))
 
-                break
+                return s
+
             except:
                 print("Couldn't bind to that port")
                 break
-
-        self.connections = []
-        self.accept_connections()
 
     def accept_connections(self):
         self.s.listen(100)
