@@ -28,7 +28,6 @@ class MainServer:
 class Server(MainServer):
     def __init__(self):
         self.ip = parser.host
-        self.port = parser.p
         self.voice_chat = self.CreateServer(parser.vp, "Voice Chat")
         self.command_server = self.CreateServer(parser.cp, "Controller Server")
 
