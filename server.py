@@ -32,8 +32,8 @@ class Server(MainServer):
         self.command_server = self.CreateServer(parser.cp, "Controller Server")
 
         self.connections = []
-        self.accept_connections()
-
+        threading.Thread(target=self.accept_connections)
+        threading.Thread(target=self.listenForController)
     def controllerHandler(self):
         pass
 
